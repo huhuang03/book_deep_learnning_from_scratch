@@ -1,0 +1,3 @@
+* Refer
+- 计算机系统要素：从零开始构建现代计算机
+- [[https://github.com/oreilly-japan/deep-learning-from-scratch][source code of the book]]
