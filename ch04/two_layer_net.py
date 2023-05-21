@@ -20,13 +20,19 @@ class TwoNetLayer:
     def predict(self, x):
         # a1 z1
         a1 = np.dot(x, self.params[W1]) + self.params[B1]
+        # print('a1: ', a1)
         z1 = sdl.sigmoid(a1)
+        # print('z1: ', z1)
         a2 = np.dot(z1, self.params[W2]) + self.params[B2]
         z2 = sdl.softmax(a2)
         return z2
 
     def lose(self, x, t):
-        return sdl.cross_entropy_error(self.predict(x), t)
+        # 是不是这个lose不对？
+        # print(f'W1: {self.params[W1]}')
+        y = self.predict(x)
+        # print(f"y: {y}")
+        return sdl.cross_entropy_error(y, t)
 
     def accuracy(self, x, t):
         """
@@ -44,6 +50,6 @@ class TwoNetLayer:
     def numerical_gradient(self, x, t):
         loss_w = lambda w: self.lose(x, t)
         grad = {}
-        for key in (W1, B2, W2, B2):
+        for key in (W1, B1, W2, B2):
             grad[key] = sdl.numerical_gradient(loss_w, self.params[key])
         return grad

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import os
 import pickle
 
@@ -22,9 +22,9 @@ class Cache:
             pickle.dump(self, f)
 
     @staticmethod
-    def load() -> 'Cache':
+    def load() -> Optional['Cache']:
         if not os.path.exists(cache_path):
-            return
+            return None
         with open(cache_path, 'rb') as f:
             return pickle.load(f)
 
