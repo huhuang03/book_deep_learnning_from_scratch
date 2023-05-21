@@ -1,3 +1,4 @@
 .idea/
 mnist_data/
 __pycache__/
+runtime/

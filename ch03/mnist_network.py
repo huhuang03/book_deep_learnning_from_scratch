@@ -3,7 +3,9 @@ import pickle
 
 import numpy as np
 
-from . import mnist, sigmoid, softmax
+from . import sigmoid, softmax
+from util import mnist
+
 
 def get_test_data():
     (x_train, t_train), (x_test, t_test) = mnist.load_mnist(normalize=True, flatten=True, one_hot_label=False)
