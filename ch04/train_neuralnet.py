@@ -38,6 +38,9 @@ for i in range(iters_num):
         train_lose_list.append(cached_items[i].loss)
         print(f'cached train_lose_list: {train_lose_list}')
         continue
+    if i == begin_i:
+        print(f'{i}/{iters_num}')
+
     batch_mask = np.random.choice(train_size, batch_size)
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
@@ -54,5 +57,5 @@ for i in range(iters_num):
     loss = network.lose(x_batch, t_batch)
     cache_item.loss = loss
     train_lose_list.append(loss)
-    print(f"train_lose_list: {train_lose_list}")
+    print(f"train_lose_list: {train_lose_list}\n{i}/{iters_num}")
     cache.save()

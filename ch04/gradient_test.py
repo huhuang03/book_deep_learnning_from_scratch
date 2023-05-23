@@ -1,14 +1,14 @@
 import math
 import numpy as np
 
-from common.gradient import gradient
+from common.gradient import numerical_gradient
 
 def fx(x):
     return (math.pow(x[0], 2) + math.pow(x[1], 2)) / 2
 
 def iter_gradient(fn, x, step, times):
     for _ in np.arange(times):
-        g = gradient(fn, x)
+        g = numerical_gradient(fn, x)
         x -= g * step
     print(x)
 
