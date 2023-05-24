@@ -32,7 +32,7 @@ def start():
         for key in (W1, B1, W2, B2):
             network.params[key] -= learning_rage * grad[key]
 
-        record:train_recorder.TrainRecord  = {
+        record:train_recorder.TrainRecord = {
             'index': i,
             'w1': network.params[W1],
             'b1': network.params[B1],
@@ -43,3 +43,7 @@ def start():
         }
         train_recorder.insert(record)
         print(f'{i}/{iters_num}: loss: {record["loss"]}, accuracy: {record["accuracy"]}')
+
+
+if __name__ == '__main__':
+    start()
