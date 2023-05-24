@@ -1,5 +1,5 @@
 import numpy as np
-import sdl
+import sdl_x
 from .constant import *
 
 # how about do common net?
@@ -21,10 +21,10 @@ class TwoNetLayer:
         # a1 z1
         a1 = np.dot(x, self.params[W1]) + self.params[B1]
         # print('a1: ', a1)
-        z1 = sdl.sigmoid(a1)
+        z1 = sdl_x.sigmoid(a1)
         # print('z1: ', z1)
         a2 = np.dot(z1, self.params[W2]) + self.params[B2]
-        z2 = sdl.softmax(a2)
+        z2 = sdl_x.softmax(a2)
         return z2
 
     def lose(self, x, t):
@@ -32,7 +32,7 @@ class TwoNetLayer:
         # print(f'W1: {self.params[W1]}')
         y = self.predict(x)
         # print(f"y: {y}")
-        return sdl.cross_entropy_error(y, t)
+        return sdl_x.cross_entropy_error(y, t)
 
     def accuracy(self, x, t):
         """
@@ -51,5 +51,5 @@ class TwoNetLayer:
         loss_w = lambda w: self.lose(x, t)
         grad = {}
         for key in (W1, B1, W2, B2):
-            grad[key] = sdl.numerical_gradient(loss_w, self.params[key])
+            grad[key] = sdl_x.numerical_gradient(loss_w, self.params[key])
         return grad

@@ -7,4 +7,3 @@ y = np.sin(x)
 plt.plot(x, y, label="sin", linestyle="--")
 plt.legend()
 plt.show()
-
