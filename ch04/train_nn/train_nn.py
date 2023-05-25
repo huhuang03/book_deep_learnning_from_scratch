@@ -1,11 +1,21 @@
+import sys
+
 import numpy as np
+import psutil
 
 from util.mnist import load_mnist
 from . import train_recorder
 from .. import two_layer_net
 from ..constant import *
 
+
 def start():
+    current_p = psutil.Process()
+    if sys.platform == 'win32':
+        current_p.nice(0)
+    else:
+        print('is linux')
+        current_p.nice(-20)
     (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
     # what's this
@@ -32,7 +42,7 @@ def start():
         for key in (W1, B1, W2, B2):
             network.params[key] -= learning_rage * grad[key]
 
-        record:train_recorder.TrainRecord = {
+        record: train_recorder.TrainRecord = {
             'index': i,
             'w1': network.params[W1],
             'b1': network.params[B1],
