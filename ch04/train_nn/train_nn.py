@@ -9,13 +9,16 @@ from .. import two_layer_net
 from ..constant import *
 
 
-def start():
+def try_set_low_priority():
     current_p = psutil.Process()
     if sys.platform == 'win32':
         current_p.nice(0)
     else:
         print('is linux')
         current_p.nice(-20)
+
+
+def start():
     (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
     # what's this
