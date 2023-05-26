@@ -2,4 +2,3 @@
 mnist_data/
 __pycache__/
 runtime/
-*.db
