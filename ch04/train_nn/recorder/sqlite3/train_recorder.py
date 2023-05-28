@@ -2,19 +2,9 @@ import json
 import os
 import sqlite3
 from typing import Optional
-from typing import TypedDict
+from ..recoder import TrainRecord
 
 import numpy as np
-
-
-class TrainRecord(TypedDict):
-    index: int
-    w1: np.ndarray
-    b1: np.ndarray
-    w2: np.ndarray
-    b2: np.ndarray
-    loss: float
-    accuracy: float
 
 def create_table_if_need():
     c, db = get_cursor()

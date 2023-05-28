@@ -1,7 +1,7 @@
 import numpy as np
 
 from util.mnist import load_mnist
-from .. import train_recorder
+from ch04.train_nn.recorder.sqlite3 import train_recorder
 from ... import two_layer_net
 from ...constant import *
 

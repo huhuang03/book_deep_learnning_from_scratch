@@ -1,28 +1,14 @@
-import sys
-
 import numpy as np
-import psutil
 
 from util.mnist import load_mnist
-from . import train_recorder
+from .recorder.mongo import train_recoder_dao
 from .. import two_layer_net
+from .recorder.recoder import TrainRecord
 from ..constant import *
-
-
-def try_set_low_priority():
-    current_p = psutil.Process()
-    if sys.platform == 'win32':
-        current_p.nice(0)
-    else:
-        print('is linux')
-        current_p.nice(-20)
 
 
 def start():
     (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
-
-    # what's this
-    train_lose_list = []
 
     iters_num = 10000
     train_size = x_train.shape[0]
@@ -31,11 +17,15 @@ def start():
 
     network = two_layer_net.TwoNetLayer(input_size=784, hidden_size=50, output_size=10)
 
+    find_start_index = False
     for i in range(iters_num):
-        record = train_recorder.find_by_index(i)
+        record = train_recoder_dao.find_by_index(i)
         if record is not None:
             network.params = {W1: record['w1'], B1: record['b1'], W2: record['w2'], B2: record['b2']}
             continue
+        if not find_start_index:
+            print('start index: ', i)
+        find_start_index = True
 
         batch_mask = np.random.choice(train_size, batch_size)
         x_batch = x_train[batch_mask]
@@ -45,7 +35,7 @@ def start():
         for key in (W1, B1, W2, B2):
             network.params[key] -= learning_rage * grad[key]
 
-        record: train_recorder.TrainRecord = {
+        record: TrainRecord = {
             'index': i,
             'w1': network.params[W1],
             'b1': network.params[B1],
@@ -54,7 +44,7 @@ def start():
             'loss': network.lose(x_batch, t_batch),
             'accuracy': network.accuracy(x_batch, t_batch)
         }
-        train_recorder.insert(record)
+        train_recoder_dao.insert(record)
         print(f'{i}/{iters_num}: loss: {record["loss"]}, accuracy: {record["accuracy"]}')
 
 
