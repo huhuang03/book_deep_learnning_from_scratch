@@ -1,7 +1,7 @@
 import json
 
 import numpy as np
-from .get_db import collection
+from ch04.other.mongo.get_db import collection
 from ..sqlite3.train_recorder import get_cursor
 
 c, sqlite3_db = get_cursor()

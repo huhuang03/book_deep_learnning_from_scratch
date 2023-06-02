@@ -1,11 +1,8 @@
-import json
-import os
-import sqlite3
 from typing import Optional
 from ..recoder import TrainRecord
 
 import numpy as np
-from .get_db import collection
+from ch04.other.mongo.get_db import collection
 
 
 def insert(item: TrainRecord):
