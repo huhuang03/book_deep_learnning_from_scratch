@@ -23,7 +23,7 @@ class Foo:
         self.i = i
 
     def hello(self):
-        print(f'Foo hello {self.i}')
+        pass
 
 
 

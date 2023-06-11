@@ -1,10 +1,13 @@
 import numpy as np
 
 from util.mnist import load_mnist
-from .recorder.mongo import train_recoder_dao
 from .. import two_layer_net
-from .recorder.recoder import TrainRecord
 from ..constant import *
+
+is_record = False
+if is_record:
+    from .recorder.mongo import train_recoder_dao
+    from .recorder.recoder import TrainRecord
 
 
 def start():
@@ -19,13 +22,14 @@ def start():
 
     find_start_index = False
     for i in range(iters_num):
-        record = train_recoder_dao.find_by_index(i)
-        if record is not None:
-            network.params = {W1: record['w1'], B1: record['b1'], W2: record['w2'], B2: record['b2']}
-            continue
-        if not find_start_index:
-            print('start index: ', i)
-        find_start_index = True
+        if is_record:
+            record = train_recoder_dao.find_by_index(i)
+            if record is not None:
+                network.params = {W1: record['w1'], B1: record['b1'], W2: record['w2'], B2: record['b2']}
+                continue
+            if not find_start_index:
+                print('start index: ', i)
+            find_start_index = True
 
         batch_mask = np.random.choice(train_size, batch_size)
         x_batch = x_train[batch_mask]
@@ -35,17 +39,18 @@ def start():
         for key in (W1, B1, W2, B2):
             network.params[key] -= learning_rage * grad[key]
 
-        record: TrainRecord = {
-            'index': i,
-            'w1': network.params[W1],
-            'b1': network.params[B1],
-            'w2': network.params[W2],
-            'b2': network.params[B2],
-            'loss': network.lose(x_batch, t_batch),
-            'accuracy': network.accuracy(x_batch, t_batch)
-        }
-        train_recoder_dao.insert(record)
-        print(f'{i}/{iters_num}: loss: {record["loss"]}, accuracy: {record["accuracy"]}')
+        if is_record:
+            record: TrainRecord = {
+                'index': i,
+                'w1': network.params[W1],
+                'b1': network.params[B1],
+                'w2': network.params[W2],
+                'b2': network.params[B2],
+                'loss': network.lose(x_batch, t_batch),
+                'accuracy': network.accuracy(x_batch, t_batch)
+            }
+            train_recoder_dao.insert(record)
+        print(f'{i}/{iters_num}: loss: {network.lose(x_batch, t_batch)}, accuracy: {network.accuracy(x_batch, t_batch)}')
 
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ import numpy as np
 import sdl_x
 from .constant import *
 
+
 # how about do common net?
 class TwoNetLayer:
     def __init__(self, input_size, hidden_size, output_size):
@@ -48,8 +49,9 @@ class TwoNetLayer:
         return accuracy
 
     def numerical_gradient(self, x, t):
-        loss_w = lambda w: self.lose(x, t)
+        def loss(_):
+            return self.lose(x, t)
         grad = {}
         for key in (W1, B1, W2, B2):
-            grad[key] = sdl_x.numerical_gradient(loss_w, self.params[key])
+            grad[key] = sdl_x.numerical_gradient(loss, self.params[key])
         return grad
