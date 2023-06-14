@@ -19,21 +19,33 @@ class TrainRecord(TypedDict):
     accuracy: float
 
 
-def insert(item: TrainRecord):
+class InsertTrainRecord(TrainRecord):
+    batch_size: Optional[int]
+
+
+def insert(item: InsertTrainRecord):
     def v(src):
         return src.tolist()
-    collection.insert_one({
+
+    to_insert = {
         'index': item['index'],
         'w': v(item['w']),
         'b': v(item['b']),
         'loss': item['loss'],
-        'accuracy': item['accuracy'],
-    })
+        'accuracy': item['accuracy']
+    }
+    if 'batch_size' in item:
+        to_insert['batch_size'] = item.get('batch_size')
+
+    collection.insert_one(to_insert)
 
 
 def get_latest() -> Optional[TrainRecord]:
     one = collection.find_one({}, sort=[('index', pymongo.DESCENDING)])
-    v = lambda src: np.array(src)
+
+    def v(src):
+        return np.array(src)
+
     if one:
         return {
             'w': v(one['w']),
