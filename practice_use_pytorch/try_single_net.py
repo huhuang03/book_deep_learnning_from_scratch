@@ -1,6 +1,4 @@
-import cv2
 from torchvision import datasets, transforms
-import torchvision
 import torch
 from torch.utils.data import DataLoader
 
@@ -12,6 +10,7 @@ img0 = train_dataset.data[0].numpy()
 height, width = img0.shape
 img_size = height * width
 
+# model = torch.nn.Sequential(torch.nn.Flatten(), torch.nn.Linear(img_size, 10), torch.nn.Softmax())
 model = torch.nn.Sequential(torch.nn.Flatten(), torch.nn.Linear(img_size, 10))
 loss_fn = torch.nn.CrossEntropyLoss()
 
