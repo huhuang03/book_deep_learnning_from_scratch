@@ -5,8 +5,8 @@ import pymongo
 
 from mongo_util import get_collection
 
-# 不用框架的单层训练过程，但是这个有个误差，就是使用了softmax(sigmoid)两层，我本来是想做一个最简单的，只有softmax的示例
-collection_name = 'manually_single_layer'
+# 不用框架的单层训练过程，一个最简单的，只有Linear - SoftMax的示例
+collection_name = 'manually_single_layer_1'
 
 collection = get_collection(collection_name)
 collection.create_index('index', unique=True)
