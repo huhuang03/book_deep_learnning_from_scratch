@@ -7,3 +7,4 @@ local_properties.yml
 bck/
 
 *.db
+*.egg-info/
